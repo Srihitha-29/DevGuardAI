@@ -1,0 +1,22 @@
+# Virtual Environment
+venv/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Environment Variables
+backend/.env
+.env
+
+# Generated Files
+backend/uploads/
+backend/reports/
+backend/extracted_projects/
+
+# VS Code
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store

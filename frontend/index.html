@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevGuardAI — AI Security Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2L21 5.5V11C21 16.5 17.5 20.8 12 22C6.5 20.8 3 16.5 3 11V5.5L12 2Z" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M8 12L10.8 14.8L16 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-name">DevGuardAI</span>
+  </div>
+  <span class="brand-tag"> Hybrid Static Security Auditor • Gemini AI Powered</span>
+</header>
+
+<main class="container">
+
+  <!-- ========================= -->
+  <!-- UPLOAD SCREEN -->
+  <!-- ========================= -->
+  <section id="upload-screen" class="screen active">
+    <div class="hero-grid">
+
+      <div class="about-col">
+        <h1>Find vulnerabilities before attackers do.</h1>
+        <p class="lede">
+         DevGuard AI is a hybrid code security auditor that combines fast
+  rule-based static scanning with Gemini AI contextual security analysis.
+  Scan source files or entire ZIP projects, understand security risks,
+  receive AI-powered secure fixes, and download a professional security report.
+        </p>
+        <ul class="coverage-list">
+          <li>🛡️ Rule-Based Static Scanner</li>
+<li>🤖 AI Contextual Vulnerability Detection</li>
+<li>💡 Secure Fix Suggestions</li>
+<li>📊 Security Score Dashboard</li>
+<li>📄 Downloadable PDF Security Report</li>
+        </ul>
+      </div>
+
+      <div class="upload-col">
+        <form id="upload-form">
+          <label id="dropzone" class="dropzone">
+            <input type="file" id="file-input" accept=".zip,.java,.py,.js,.cpp" hidden>
+            <svg class="upload-icon" width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M13 17V6M13 6L8 11M13 6L18 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 19V21C5 21.83 5.67 22.5 6.5 22.5H19.5C20.33 22.5 21 21.83 21 21V19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <p class="dz-title" id="dz-title">  Drop a source file or ZIP project</p>
+            <p id="file-name" class="dz-sub">Supports .zip, .java, .py, .js and .cpp files</p>
+            
+          </label>
+
+          <button id="scan-btn" type="submit">🛡️ Run security scan</button>
+          <p class="privacy-note"> Static analysis only • Files are never executed.</p>
+  <p class="lang-title">Supported Languages</p>
+          <ul class="lang-row">
+            <li>☕ Java</li>
+            <li>🐍 Python</li>
+            <li>📜 JavaScript</li>
+            <li>➕ C++</li>
+          </ul>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================= -->
+  <!-- STAGE / ANIMATION SCREEN -->
+  <!-- ========================= -->
+  <section id="loading-screen" class="screen">
+    <div class="stage-panel">
+      <ol class="stage-list" id="stage-list">
+        <li class="stage" data-stage="upload">
+          <span class="stage-dot"></span>
+          <div><h3>Uploading</h3><p>Sending your project securely.</p></div>
+        </li>
+        <li class="stage" data-stage="extract">
+          <span class="stage-dot"></span>
+          <div><h3>Extracting</h3><p>Reading the ZIP contents.</p></div>
+        </li>
+        <li class="stage" data-stage="scan">
+          <span class="stage-dot"></span>
+          <div><h3>Static scan</h3><p>Detecting vulnerabilities with the rule-based scanner.</p></div>
+        </li>
+        <li class="stage" data-stage="review">
+          <span class="stage-dot"></span>
+          <div><h3>AI audit</h3><p>Gemini is reviewing risky code, explaining vulnerabilities, and performing contextual security analysis.</p></div>
+        </li>
+        <li class="stage" data-stage="report">
+          <span class="stage-dot"></span>
+          <div><h3>Report</h3><p>Preparing your security dashboard.</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========================= -->
+  <!-- RESULTS SCREEN -->
+  <!-- ========================= -->
+  <section id="results-screen" class="screen">
+
+    <div class="results-header">
+      <div>
+        <h2 id="project-name">project.zip</h2>
+        <p>Hybrid security analysis completed successfully.</p>
+      </div>
+      <button id="scan-again" class="btn-outline">Scan another file</button>
+    </div>
+
+    <div id="ai-unavailable-banner" class="warning-banner" hidden>
+      ⚠️ AI audit did not complete for one or more files (Gemini API quota/rate limit reached). Results below reflect the static scanner only — not a full clearance.
+    </div>
+
+    <!-- All-clear state: shown instead of the dashboard when zero issues are found -->
+    <div id="all-clear" class="all-clear" hidden>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <path d="M24 4L42 11V22C42 33 34.5 40.5 24 44C13.5 40.5 6 33 6 22V11L24 4Z" stroke="#4FAE72" stroke-width="1.8"/>
+        <path d="M16 24L21.5 29.5L32 18" stroke="#4FAE72" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h2>No security issues found</h2>
+      <p>
+  DevGuard AI scanned
+  <span id="clear-files-count">0</span>
+  file(s). No rule-based or AI-detected security vulnerabilities were found.
+</p>
+    </div>
+
+    <div id="issues-view">
+
+      <div class="score-card">
+        <div class="score-circle">
+          <svg viewBox="0 0 120 120" class="score-ring">
+            <circle cx="60" cy="60" r="52" class="score-ring-track"/>
+            <circle cx="60" cy="60" r="52" class="score-ring-fill" id="score-ring-fill"/>
+          </svg>
+          <div class="score-circle-value">
+            <span id="score">100</span>
+            <small>/ 100</small>
+          </div>
+        </div>
+        <div class="score-details">
+          <h3>Security score</h3>
+          <p id="score-text">Excellent security</p>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <h4 id="files-scanned">0</h4>
+          <p>📄 Files scanned</p>
+        </div>
+        <div class="summary-card">
+          <h4 id="issues-found">0</h4>
+          <p>⚠️ Total issues</p>
+        </div>
+        <div class="summary-card sev-high">
+          <h4 id="high-risk">0</h4>
+          <p>🔴 High</p>
+        </div>
+        <div class="summary-card sev-medium">
+          <h4 id="medium-risk">0</h4>
+          <p>🟡 Medium</p>
+        </div>
+        <div class="summary-card sev-low">
+          <h4 id="low-risk">0</h4>
+          <p>🟢 Low</p>
+        </div>
+      </div>
+
+      <div class="graph-card">
+        <h3>Vulnerability distribution</h3>
+        <div class="bars">
+          <div class="bar-box"><div class="bar high" id="bar-high"></div><span>High</span></div>
+          <div class="bar-box"><div class="bar medium" id="bar-medium"></div><span>Medium</span></div>
+          <div class="bar-box"><div class="bar low" id="bar-low"></div><span>Low</span></div>
+        </div>
+      </div>
+
+      <!-- Scanner Findings -->
+      <div class="findings-section">
+        <div class="findings-header">
+          <h3>Scanner findings</h3>
+          <span id="scanner-findings-count">0 issues</span>
+        </div>
+        <p class="section-sub">Rule-based vulnerabilities detected using predefined security patterns and regex rules.</p>
+        <div id="scanner-findings-list"></div>
+      </div>
+
+      <!-- AI Security Findings -->
+      <div class="findings-section">
+        <div class="findings-header">
+          <h3>AI Security Findings <span class="ai-title-badge">🤖 AI</span></h3>
+          <span id="ai-findings-count">0 findings</span>
+        </div>
+        <p class="section-sub">Gemini AI contextual analysis highlighting security risks, secure fixes, and additional vulnerabilities beyond static rules.</p>
+        <div id="ai-findings-list"></div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="findings-section">
+        <div class="findings-header">
+          <h3>AI recommendations</h3>
+          <span id="recommendations-count">0 items</span>
+        </div>
+        <p class="section-sub">Best-practice secure coding recommendations generated from the complete security analysis.</p>
+        <ul id="recommendations-list" class="recommendations-list"></ul>
+      </div>
+
+    </div>
+
+    <div class="bottom-actions">
+      <button id="download-report" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 1.5V10.5M8 10.5L4.5 7M8 10.5L11.5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2.5 12.5V13.5C2.5 14.05 2.95 14.5 3.5 14.5H12.5C13.05 14.5 13.5 14.05 13.5 13.5V12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Download Security Report (PDF)
+      </button>
+    </div>
+
+  </section>
+
+</main>
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
