@@ -6,7 +6,7 @@
 // security_score
 // =======================================
 
-const API_BASE = "https://devguardai.onrender.com/upload";
+const API_BASE = "https://devguardai.onrender.com";
 
 // -------- Screens --------
 const uploadScreen = document.getElementById("upload-screen");
